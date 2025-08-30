@@ -1,5 +1,7 @@
 # $Header$
 
+#new code 
+
 # dbdrv: exec fnd bin FNDLOAD bin &phase=daa+51 checkfile:~PROD:~PATH:~FILE &ui_apps 0 Y UPLOAD @FND:patch/115/import/aflvmlu.lct @~PROD:~PATH/~FILE
 LANGUAGE = "US"
 LDRCONFIG = "aflvmlu.lct 120.1.12020000.2"
