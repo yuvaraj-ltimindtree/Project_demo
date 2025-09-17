@@ -15,8 +15,6 @@ on:
       Repo_Directory:
         description: Repo directory
         required: false
-  push:
-    branches: [ develop ]
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
