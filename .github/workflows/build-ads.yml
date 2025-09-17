@@ -24,7 +24,7 @@ on:
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
   BASE_PATH: "/u01/buildsrv/EBSHOME"
-  LIVE: DB_Integration                # <- set to your runtime folder name
+  LIVE: Github_Demo                # <- set to your runtime folder name
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
@@ -52,10 +52,6 @@ jobs:
           ref: develop
           fetch-depth: 0   # get tags
           fetch-tags: true
-      - name: Python setup
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.6.8'
       - name: Converting User Input to CSV file
         run: |
           mkdir -p "$BASE_PATH/csv_files"
@@ -77,8 +73,6 @@ jobs:
               w.writerow(row)
           PY
 
-      # (Disabled in original) Merge check step omitted. Add if needed.
-
       - name: File check
         run: |
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/duplicate_check.py" BUILD "$BUILD_NUMBER" "$REQUESTED_FOR" "$REQUESTED_FOR_EMAIL"
@@ -96,7 +90,6 @@ jobs:
 
       - name: Trigger Python Script for Package Building
         run: |
-          python3 "$BASE_PATH/Automation_Scripts/$LIVE/test.py" BUILD "$BUILD_NUMBER"
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/main.py" BUILD "$BUILD_NUMBER"
 
       - name: Upload Repo Snapshot Artifact
