@@ -5,30 +5,33 @@ on:
     inputs:
       Jira_No:
         description: Jira ticket number
-        required: false
+        required: true
       FileNames:
         description: Comma separated file names
         required: false
       CUSTOM_TOP:
         description: Custom top value
-        required: false
+        required: true
+        default: $XXDEMO_TOP
+        type: choice
+        options:
+        - $XXDEMO_TOP
+        - $XXDEMOC_TOP
       Repo_Directory:
-        description: Repo directory
-        required: false
-  push:
-    branches: [ develop ]
+        description: directory path in repository 
+        required: true
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
-  BASE_PATH: ${{ github.workspace }}
-  LIVE: Demo                # <- set to your runtime folder name
+  BASE_PATH: "/u01/buildsrv/EBSHOME"
+  LIVE: Github_Demo                # <- set to your runtime folder name
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
   Repo_Directory: ${{ inputs.Repo_Directory }}
   BUILD_NUMBER: ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
-  REQUESTED_FOR_EMAIL: ""    # Not directly available in GitHub; supply via secret or input if needed
+  REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
 
   # Azure DevOps target repo (template) publishing (adjust)
   AZDO_TEMPLATE_REPO: https://dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Template
@@ -40,7 +43,7 @@ env:
 jobs:
   ebs-build:
     name: EBS Build
-    runs-on: ltim-database--autodb
+    runs-on: LTIM-buildsrv
 
     steps:
       - name: Checkout (develop)
@@ -49,7 +52,6 @@ jobs:
           ref: develop
           fetch-depth: 0   # get tags
           fetch-tags: true
-
       - name: Converting User Input to CSV file
         run: |
           mkdir -p "$BASE_PATH/csv_files"
@@ -71,8 +73,6 @@ jobs:
               w.writerow(row)
           PY
 
-      # (Disabled in original) Merge check step omitted. Add if needed.
-
       - name: File check
         run: |
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/duplicate_check.py" BUILD "$BUILD_NUMBER" "$REQUESTED_FOR" "$REQUESTED_FOR_EMAIL"
@@ -90,7 +90,6 @@ jobs:
 
       - name: Trigger Python Script for Package Building
         run: |
-          python3 "$BASE_PATH/Automation_Scripts/$LIVE/test.py" BUILD "$BUILD_NUMBER"
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/main.py" BUILD "$BUILD_NUMBER"
 
       - name: Upload Repo Snapshot Artifact
@@ -98,45 +97,6 @@ jobs:
         with:
           name: repo-snapshot
           path: .
-
-      - name: Publish template to Azure DevOps (EBS-Template) repo
-        if: success()
-        env:
-          AZDO_USER: ${{ secrets.AZDO_USER }}
-          AZDO_PAT:  ${{ secrets.AZDO_PAT }}
-        run: |
-          set -e
-          git config user.name  "$GIT_AUTHOR_NAME"
-          git config user.email "$GIT_AUTHOR_EMAIL"
-
-          workdir="$BASE_PATH/excel_file"
-          if [ ! -d "$workdir" ]; then
-            echo "Directory $workdir not found, creating."
-            mkdir -p "$workdir"
-            touch "$workdir/.keep"
-          fi
-          cd "$workdir"
-
-          git init
-          git add -A
-          git commit -m "new Template by ${REQUESTED_FOR:-unknown} (Build ${BUILD_NUMBER})" || echo "Nothing to commit."
-
-          # add remote with PAT (Basic auth)
-          remote_url="${AZDO_TEMPLATE_REPO}"
-          # inject PAT
-          proto_host=$(echo "$remote_url" | sed -E 's#(https?://)(.*)#\1\2#')
-          auth_url=$(echo "$proto_host" | sed -E "s#https?://#https://${AZDO_USER}:${AZDO_PAT}@#")
-          git branch -M master
-          git remote add origin "$auth_url"
-
-          # pull + rebase to avoid overwriting remote master
-          git fetch origin master || true
-            # If history exists, integrate
-          if git rev-parse --verify origin/master >/dev/null 2>&1; then
-            git pull --rebase origin master || true
-          fi
-
-          git push origin master
 
       - name: Summary
         run: |
