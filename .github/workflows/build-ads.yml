@@ -5,16 +5,21 @@ on:
     inputs:
       Jira_No:
         description: Jira ticket number
-        required: false
+        required: true
       FileNames:
         description: Comma separated file names
         required: false
       CUSTOM_TOP:
         description: Custom top value
-        required: false
+        required: true
+        default: $XXDEMO_TOP
+        type: choice
+        options:
+        - $XXDEMO_TOP
+        - $XXDEMOC_TOP
       Repo_Directory:
-        description: Repo directory
-        required: false
+        description: directory path in repository 
+        required: true
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
