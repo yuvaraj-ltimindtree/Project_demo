@@ -50,11 +50,6 @@ jobs:
           fetch-depth: 0   # get tags
           fetch-tags: true
 
-      - name: Python setup
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
       - name: Converting User Input to CSV file
         run: |
           mkdir -p "$BASE_PATH/csv_files"
