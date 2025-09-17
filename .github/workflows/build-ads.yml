@@ -38,7 +38,7 @@ env:
 jobs:
   ebs-build:
     name: EBS Build
-    runs-on: ltim-database--autodb
+    runs-on: LTIM-buildsrv
 
     steps:
       - name: Checkout (develop)
