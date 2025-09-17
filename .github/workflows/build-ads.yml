@@ -18,15 +18,15 @@ on:
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
-  BASE_PATH: ${{ github.workspace }}
-  LIVE: Demo                # <- set to your runtime folder name
+  BASE_PATH: "/u01/buildsrv/EBSHOME"
+  LIVE: DB_Integration                # <- set to your runtime folder name
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
   Repo_Directory: ${{ inputs.Repo_Directory }}
   BUILD_NUMBER: ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
-  REQUESTED_FOR_EMAIL: ""    # Not directly available in GitHub; supply via secret or input if needed
+  REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
 
   # Azure DevOps target repo (template) publishing (adjust)
   AZDO_TEMPLATE_REPO: https://dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Template
@@ -96,45 +96,6 @@ jobs:
         with:
           name: repo-snapshot
           path: .
-
-      - name: Publish template to Azure DevOps (EBS-Template) repo
-        if: success()
-        env:
-          AZDO_USER: ${{ secrets.AZDO_USER }}
-          AZDO_PAT:  ${{ secrets.AZDO_PAT }}
-        run: |
-          set -e
-          git config user.name  "$GIT_AUTHOR_NAME"
-          git config user.email "$GIT_AUTHOR_EMAIL"
-
-          workdir="$BASE_PATH/excel_file"
-          if [ ! -d "$workdir" ]; then
-            echo "Directory $workdir not found, creating."
-            mkdir -p "$workdir"
-            touch "$workdir/.keep"
-          fi
-          cd "$workdir"
-
-          git init
-          git add -A
-          git commit -m "new Template by ${REQUESTED_FOR:-unknown} (Build ${BUILD_NUMBER})" || echo "Nothing to commit."
-
-          # add remote with PAT (Basic auth)
-          remote_url="${AZDO_TEMPLATE_REPO}"
-          # inject PAT
-          proto_host=$(echo "$remote_url" | sed -E 's#(https?://)(.*)#\1\2#')
-          auth_url=$(echo "$proto_host" | sed -E "s#https?://#https://${AZDO_USER}:${AZDO_PAT}@#")
-          git branch -M master
-          git remote add origin "$auth_url"
-
-          # pull + rebase to avoid overwriting remote master
-          git fetch origin master || true
-            # If history exists, integrate
-          if git rev-parse --verify origin/master >/dev/null 2>&1; then
-            git pull --rebase origin master || true
-          fi
-
-          git push origin master
 
       - name: Summary
         run: |
