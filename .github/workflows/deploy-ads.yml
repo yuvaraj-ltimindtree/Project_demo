@@ -3,69 +3,30 @@ name: EBS Deployment Pipeline
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Target Environment'
+      Build_No:
+        description: 'Build No'
         required: true
-        default: 'EBSSIT'
-        type: choice
-        options:
-        - EBSSIT
-        - EBSUAT
-        - EBSPROD
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
 env:
-  BASE_PATH: ${{ github.workspace }}
-  LIVE: "LIVE"  # Adjust based on your setup
+  BASE_PATH: "/u01/buildsrv/EBSHOME"
+  LIVE: Github_Demo  
+  Build_No: ${{ inputs.CUSTOM_TOP }}
   GIT_CREDENTIAL: ${{ secrets.GIT_CREDENTIAL }}
-
+    
 jobs:
-  # Stage 1: Publishing templates to build server
-  publish-templates:
-    name: Publishing the templates to build server
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    - name: Setup Git credentials
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-    
-    - name: Publish template to Git Repo
-      run: |
-        cd "${{ env.BASE_PATH }}/excel_file"
-        git pull https://${{ secrets.GIT_CREDENTIAL }}@dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Template master
-
   # Stage 2: EBSSIT Environment
-  deploy-sit:
-    name: Deploy to EBSSIT
-    runs-on: ubuntu-latest
-    needs: publish-templates
+  deploy-EBSSIT:
+    name: EBSSIT
+    runs-on: LTIM-buildsrv
     environment: EBSSIT
-    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
+    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/develop'
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    env:
+      ENVIRONMENT_NAME: EBSSIT
     
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-    
-    - name: Deploy to EBSSIT
+    steps:        
+    - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "EBSSIT" "${{ github.run_number }}"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "$Build_No"
     
     - name: Display Deployment Log
       if: always()
@@ -81,178 +42,12 @@ jobs:
       if: always()
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
-    
-    - name: Push Code to Azure Repos
-      run: |
-        cd "${{ env.BASE_PATH }}/Extracted_Packages/EBS-Deployment/"
-        git checkout "EBSSIT"
-        
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
-          BUILD \
-          "${{ github.run_number }}" \
-          "${{ github.workflow }}" \
-          "Release-${{ github.run_number }}" \
-          "${{ github.actor }}" \
-          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-          "EBSSIT" \
-          "${{ github.actor }}@users.noreply.github.com"
-        
-        git add -A
-        git status
-        git commit -m "Extracted package to EBSSIT by ${{ github.actor }}"
-        git status
-        
-        git push https://${{ secrets.GIT_CREDENTIAL }}@dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Deployment EBSSIT
 
-  # Stage 3: EBSUAT Environment
-  deploy-uat:
-    name: Deploy to EBSUAT
-    runs-on: ubuntu-latest
-    needs: deploy-sit
-    environment: EBSUAT
-    if: github.event.inputs.environment == 'EBSUAT' || (github.event.inputs.environment == '' && github.ref == 'refs/heads/main')
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-    
-    - name: Deploy to EBSUAT
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "EBSUAT" "${{ github.run_number }}"
-    
-    - name: Display Deployment Log
-      if: always()
-      run: |
-        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
-    
-    - name: Display LDT Logs
-      if: always()
-      run: |
-        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
-    
-    - name: Catch Deployment Errors
-      if: always()
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
-    
-    - name: Push Code to Azure Repos
-      run: |
-        cd "${{ env.BASE_PATH }}/Extracted_Packages/EBS-Deployment/"
-        git checkout "EBSUAT"
-        
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
-          BUILD \
-          "${{ github.run_number }}" \
-          "${{ github.workflow }}" \
-          "Release-${{ github.run_number }}" \
-          "${{ github.actor }}" \
-          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-          "EBSUAT" \
-          "${{ github.actor }}@users.noreply.github.com"
-        
-        git add -A
-        git status
-        git commit -m "Extracted package to EBSUAT by ${{ github.actor }}"
-        git status
-        
-        git push https://${{ secrets.GIT_CREDENTIAL }}@dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Deployment EBSUAT
-    
-    - name: Generate Migration Details
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/migration_details.py" "${{ github.run_number }}"
 
-  # Manual Approval for Production (using environment protection rules)
-  production-approval:
-    name: Production Deployment Approval
-    runs-on: ubuntu-latest
-    needs: deploy-uat
-    environment: 
-      name: EBSPROD-approval
-      url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-    if: github.event.inputs.environment == 'EBSPROD' || (github.event.inputs.environment == '' && github.ref == 'refs/heads/main')
-    
-    steps:
-    - name: UAT Acceptance Check
-      run: |
-        echo "⚠️ PRODUCTION DEPLOYMENT APPROVAL REQUIRED"
-        echo ""
-        echo "Please ensure the following before proceeding:"
-        echo "1. UAT acceptance is completed and recorded in ServiceNow"
-        echo "2. Change Request is approved"
-        echo ""
-        echo "This deployment will proceed to PRODUCTION environment."
 
-  # Stage 4: EBSPROD Environment
-  deploy-prod:
-    name: Deploy to EBSPROD
-    runs-on: ubuntu-latest
-    needs: production-approval
-    environment: EBSPROD
-    if: github.event.inputs.environment == 'EBSPROD' || (github.event.inputs.environment == '' && github.ref == 'refs/heads/main')
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-    
-    - name: Change Request Approval Check
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/CR_approval.py" "${{ github.run_number }}"
-    
-    - name: Deploy to EBSPROD
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "EBSPROD" "${{ github.run_number }}"
-    
-    - name: Display Deployment Log
-      if: always()
-      run: |
-        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
-    
-    - name: Display LDT Logs
-      if: always()
-      run: |
-        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
-    
-    - name: Catch Deployment Errors
-      if: always()
-      run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
-    
-    - name: Push Code to Azure Repos
-      run: |
-        cd "${{ env.BASE_PATH }}/Extracted_Packages/EBS-Deployment/"
-        git checkout "EBSPROD"
-        
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
-          BUILD \
-          "${{ github.run_number }}" \
-          "${{ github.workflow }}" \
-          "Release-${{ github.run_number }}" \
-          "${{ github.actor }}" \
-          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-          "EBSPROD" \
-          "${{ github.actor }}@users.noreply.github.com"
-        
-        git add -A
-        git status
-        git commit -m "Extracted package to EBSPROD by ${{ github.actor }}"
-        git status
-        
-        git push https://${{ secrets.GIT_CREDENTIAL }}@dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Deployment EBSPROD
-
-  # Notification job (optional)
   notify-completion:
     name: Notify Deployment Completion
-    runs-on: ubuntu-latest
+    runs-on: LTIM-buildsrv
     needs: [deploy-sit, deploy-uat, deploy-prod]
     if: always()
     
