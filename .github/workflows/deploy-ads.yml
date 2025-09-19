@@ -43,6 +43,37 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
+  deploy-EBSUAT:
+    name: EBSUAT
+    runs-on: LTIM-buildsrv
+    environment: EBSUAT
+    if: github.event.inputs.environment == 'EBSUAT' || github.ref == 'refs/heads/main'
+    
+    env:
+      ENVIRONMENT_NAME: EBSUAT
+    
+    steps:        
+    - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "EBSUAT" "$Build_No"
+    
+    - name: Display Deployment Log
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
+    
+    - name: Display LDT Logs
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
+    
+    - name: Catch Deployment Errors
+      if: always()
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
+
+
+
 
   notify-completion:
     name: Notify Deployment Completion
