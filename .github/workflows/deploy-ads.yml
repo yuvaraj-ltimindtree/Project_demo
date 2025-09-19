@@ -48,7 +48,7 @@ jobs:
   notify-completion:
     name: Notify Deployment Completion
     runs-on: LTIM-buildsrv
-    needs: [deploy-sit, deploy-uat, deploy-prod]
+    needs: [deploy-EBSSIT]
     if: always()
     
     steps:
