@@ -18,10 +18,41 @@ jobs:
     name: EBSSIT
     runs-on: LTIM-buildsrv
     environment: EBSSIT
-    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/develop'
+    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
     
     env:
       ENVIRONMENT_NAME: EBSSIT
+    
+    steps:        
+    - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "$Build_No"
+    
+    - name: Display Deployment Log
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
+    
+    - name: Display LDT Logs
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
+    
+    - name: Catch Deployment Errors
+      if: always()
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
+
+jobs:
+  # Stage 2: EBSSIT Environment
+  deploy-EBSSIT:
+    name: EBSSIT
+    runs-on: LTIM-buildsrv
+    environment: EBSSIT
+    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/develop'
+    
+    env:
+      ENVIRONMENT_NAME: EBSUAT
     
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
