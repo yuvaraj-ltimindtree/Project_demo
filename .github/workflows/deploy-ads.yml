@@ -9,7 +9,7 @@ on:
 env:
   BASE_PATH: "/u01/buildsrv/EBSHOME"
   LIVE: Github_Demo  
-  Build_No: ${{ inputs.CUSTOM_TOP }}
+  Build_No: ${{ inputs.Build_No }}
   GIT_CREDENTIAL: ${{ secrets.GIT_CREDENTIAL }}
     
 jobs:
