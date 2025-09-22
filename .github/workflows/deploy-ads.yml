@@ -26,7 +26,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "$Build_No"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$Build_No"
     
     - name: Display Deployment Log
       if: always()
@@ -55,7 +55,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "EBSUAT" "29"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "29"
     
     - name: Display Deployment Log
       if: always()
