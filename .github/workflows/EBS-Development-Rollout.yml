@@ -99,7 +99,7 @@ jobs:
           echo "Jira: $Jira_No"
           echo "Repo_Directory: $Repo_Directory"
           echo "Files: $FileNames"
-		  
+  
   # Stage 2: EBSSIT Environment
   deploy-EBSSIT:
     name: EBSSIT
@@ -206,3 +206,4 @@ jobs:
         echo "SIT Status: ${{ needs.deploy-sit.result }}"
         echo "UAT Status: ${{ needs.deploy-uat.result }}"
         echo "PROD Status: ${{ needs.deploy-prod.result }}"
+
