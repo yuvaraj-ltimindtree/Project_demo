@@ -1,0 +1,90 @@
+name: EBS Deployment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      Build_No:
+        description: 'Build No'
+        required: true
+env:
+  BASE_PATH: "/u01/buildsrv/EBSHOME"
+  LIVE: Github_Demo  
+  Build_No: ${{ inputs.Build_No }}
+  GIT_CREDENTIAL: ${{ secrets.GIT_CREDENTIAL }}
+    
+jobs:
+  # Stage 2: EBSSIT Environment
+  deploy-EBSSIT:
+    name: EBSSIT
+    runs-on: LTIM-buildsrv
+    environment: EBSSIT
+    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
+    
+    env:
+      ENVIRONMENT_NAME: EBSSIT
+    
+    steps:        
+    - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$Build_No"
+    
+    - name: Display Deployment Log
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
+    
+    - name: Display LDT Logs
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
+    
+    - name: Catch Deployment Errors
+      if: always()
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
+
+  deploy-EBSUAT:
+    name: EBSUAT
+    runs-on: LTIM-buildsrv
+    environment: EBSUAT
+    if: github.event.inputs.environment == 'EBSUAT' || github.ref == 'refs/heads/main'
+    
+    env:
+      ENVIRONMENT_NAME: EBSUAT
+    
+    steps:        
+    - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "29"
+    
+    - name: Display Deployment Log
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/deployment.log"
+    
+    - name: Display LDT Logs
+      if: always()
+      run: |
+        cat "${{ env.BASE_PATH }}/log_files/ldt_deployment.log"
+    
+    - name: Catch Deployment Errors
+      if: always()
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
+
+
+
+
+  notify-completion:
+    name: Notify Deployment Completion
+    runs-on: LTIM-buildsrv
+    needs: [deploy-EBSSIT]
+    if: always()
+    
+    steps:
+    - name: Deployment Status
+      run: |
+        echo "Deployment pipeline completed"
+        echo "SIT Status: ${{ needs.deploy-sit.result }}"
+        echo "UAT Status: ${{ needs.deploy-uat.result }}"
+        echo "PROD Status: ${{ needs.deploy-prod.result }}"
