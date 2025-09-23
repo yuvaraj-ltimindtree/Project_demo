@@ -194,15 +194,15 @@ jobs:
 
 
   notify-completion:
-    name: Notify Deployment Completion
+    name: Deployment Completion Status
     runs-on: LTIM-buildsrv
-    needs: [deploy-EBSSIT,deploy-EBSUAT]
+    needs: [deploy-EBSSIT,deploy-EBSUAT,deploy-EBSPROD]
     if: always()
     
     steps:
     - name: Deployment Status
       run: |
         echo "Deployment pipeline completed"
-        echo "SIT Status: ${{ needs.deploy-sit.result }}"
-        echo "UAT Status: ${{ needs.deploy-uat.result }}"
-        echo "PROD Status: ${{ needs.deploy-prod.result }}"
+        echo "EBSSIT Status: ${{ needs.deploy-EBSSIT.result }}"
+        echo "EBSUAT Status: ${{ needs.deploy-EBSUAT.result }}"
+        echo "EBSPROD Status: ${{ needs.deploy-EBSPROD.result }}"
