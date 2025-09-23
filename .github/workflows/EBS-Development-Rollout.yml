@@ -1,4 +1,4 @@
-name: EBS Build
+name: EBS Development Rollout 
 
 on:
   workflow_dispatch:
@@ -206,3 +206,4 @@ jobs:
         echo "EBSSIT Status: ${{ needs.deploy-EBSSIT.result }}"
         echo "EBSUAT Status: ${{ needs.deploy-EBSUAT.result }}"
         echo "EBSPROD Status: ${{ needs.deploy-EBSPROD.result }}"
+
