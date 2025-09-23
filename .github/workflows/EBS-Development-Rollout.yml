@@ -1,4 +1,4 @@
-name: EBS Development Rollout 
+name: EBS Build
 
 on:
   workflow_dispatch:
@@ -114,7 +114,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$Build_No"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
     
     - name: Display Deployment Log
       if: always()
@@ -144,7 +144,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "29"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
     
     - name: Display Deployment Log
       if: always()
@@ -175,7 +175,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "${{ env.ENVIRONMENT_NAME }}" "29"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
     
     - name: Display Deployment Log
       if: always()
@@ -194,16 +194,15 @@ jobs:
 
 
   notify-completion:
-    name: Deployment Completion Status
+    name: Notify Deployment Completion
     runs-on: LTIM-buildsrv
-    needs: [deploy-EBSSIT,deploy-EBSUAT,deploy-EBSPROD]
+    needs: [deploy-EBSSIT,deploy-EBSUAT]
     if: always()
     
     steps:
     - name: Deployment Status
       run: |
         echo "Deployment pipeline completed"
-        echo "EBSSIT Status: ${{ needs.deploy-EBSSIT.result }}"
-        echo "EBSUAT Status: ${{ needs.deploy-EBSUAT.result }}"
-        echo "EBSPROD Status: ${{ needs.deploy-EBSPROD.result }}"
-
+        echo "SIT Status: ${{ needs.deploy-sit.result }}"
+        echo "UAT Status: ${{ needs.deploy-uat.result }}"
+        echo "PROD Status: ${{ needs.deploy-prod.result }}"
