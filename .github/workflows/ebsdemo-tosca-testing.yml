@@ -1,0 +1,49 @@
+name: EBSDEMO - TOSCA Testing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sit_test:
+    name: EBSSIT_Test
+    runs-on: windows-latest
+    environment: EBSSIT_Test
+    steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\EBSPROD_TestSmokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml"
+      - name: Publish Tosca JUnit Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: sit-junit-results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml
+
+  uat_test:
+    name: EBSUAT_Test
+    runs-on: windows-latest
+    needs: sit_test
+    environment: EBSUAT_Test
+    steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\EBSUAT_TestPatchUpgradeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSUAT_Test_patch_result.xml"
+      - name: Publish Tosca JUnit Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: uat-junit-results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSUAT_Test_patch_result.xml
+
+  prod_test:
+    name: EBSPROD_Test
+    runs-on: windows-latest
+    needs: uat_test
+    environment: EBSPROD_Test
+    steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\EBSPROD_TestSmokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml"
+      - name: Publish Tosca JUnit Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-junit-results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml
