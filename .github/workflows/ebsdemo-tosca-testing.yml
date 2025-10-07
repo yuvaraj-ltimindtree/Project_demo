@@ -12,9 +12,11 @@ jobs:
       - name: Run Tosca Test scripts
         run: |
           "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\EBSPROD_TestSmokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml"
+        shell: cmd
       - name: Publish Tosca JUnit Results
         uses: actions/upload-artifact@v4
         with:
           name: sit-junit-results
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\EBSPROD_Test_smoke_result.xml
+
 
