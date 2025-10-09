@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  sit_test:
+  test-EBSSIT:
     name: EBSSIT_Test
     runs-on: LTIM_TOSCA_97
     environment: EBSSIT_Test
@@ -26,7 +26,7 @@ jobs:
           reporter: java-junit
 
 
-  sit_test:
+  test-EBSUAT:
     name: EBSUAT_Test
     runs-on: LTIM_TOSCA_97
     environment: EBSUAT_Test
@@ -47,7 +47,7 @@ jobs:
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
 
-  sit_test:
+  test-EBSPROD:
     name: EBSPROD_Test
     runs-on: LTIM_TOSCA_97
     environment: EBSPROD_Test
