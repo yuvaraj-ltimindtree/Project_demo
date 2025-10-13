@@ -11,23 +11,24 @@ jobs:
 
     env:
       ENVIRONMENT_NAME: EBSPROD_Test
-    
+
     steps:
-      - name: Publish JUnit Test Results to GitHub Actions passed
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Publish Tosca JUnit Test Results (passed)
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results
+          name: Tosca JUnit Results (Passed)
           path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
-
           reporter: java-junit
+          path-replace-backslashes: true  # since you're on Windows
 
-    
-      - name: Publish JUnit Test Results to GitHub Actions failed
+      - name: Publish Tosca JUnit Test Results (failed)
+        if: failure()
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results
+          name: Tosca JUnit Results (Failed)
           path: D:\EBSHOME_TESTING\results\27\EBSPROD_Test_smoke_result.xml
-
           reporter: java-junit
-
-
+          path-replace-backslashes: true
