@@ -3,6 +3,10 @@ name: EBSDEMO - TOSCA Testing
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   test-EBSPROD:
     name: EBSPROD_Test
@@ -16,15 +20,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Publish Tosca JUnit Test Results (passed)
+      - name: Publish Tosca JUnit Test Results (Passed)
         uses: dorny/test-reporter@v1
         with:
           name: Tosca JUnit Results (Passed)
           path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
           reporter: java-junit
-          path-replace-backslashes: true  # since you're on Windows
+          path-replace-backslashes: true
 
-      - name: Publish Tosca JUnit Test Results (failed)
+      - name: Publish Tosca JUnit Test Results (Failed)
         if: failure()
         uses: dorny/test-reporter@v1
         with:
