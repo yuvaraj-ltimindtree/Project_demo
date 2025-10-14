@@ -45,9 +45,6 @@ jobs:
       #     "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
       #   shell: cmd
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Publish JUnit Test Results to GitHub Actions
         uses: dorny/test-reporter@v1
         with:
@@ -71,8 +68,6 @@ jobs:
       #     "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
       #   shell: cmd
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Publish JUnit Test Results to GitHub Actions
         uses: dorny/test-reporter@v1
@@ -81,3 +76,4 @@ jobs:
           path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
           reporter: java-junit
           path-replace-backslashes: true
+
