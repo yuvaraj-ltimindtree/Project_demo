@@ -76,10 +76,10 @@ jobs:
         run: |
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/build_details.py" "$BUILD_NUMBER"
 
-      - name: Branch Checking (must be develop)
+      - name: Branch Checking (must be main)
         run: |
           echo "Current branch: ${GITHUB_REF_NAME}"
-          if [ "${GITHUB_REF_NAME}" != "develop" ]; then
+          if [ "${GITHUB_REF_NAME}" != "main" ]; then
             echo "ERROR: Build must run from 'develop' branch"; exit 1;
           fi
 
@@ -206,6 +206,7 @@ jobs:
         echo "SIT Status: ${{ needs.deploy-sit.result }}"
         echo "UAT Status: ${{ needs.deploy-uat.result }}"
         echo "PROD Status: ${{ needs.deploy-prod.result }}"
+
 
 
 
