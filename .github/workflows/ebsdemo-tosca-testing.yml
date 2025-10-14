@@ -30,7 +30,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Tosca JUnit Results
-          path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_RegressionConfingfile.xml
           reporter: java-junit
           path-replace-backslashes: true
 
@@ -53,7 +53,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Tosca JUnit Results
-          path: D:\EBSHOME_TESTING\results\27\EBSPROD_Test_smoke_result.xml
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_PatchUpgradeConfingfile.xml
           reporter: java-junit
           path-replace-backslashes: true      
 
@@ -77,6 +77,6 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Tosca JUnit Results
-          path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
           path-replace-backslashes: true      
