@@ -61,17 +61,16 @@ jobs:
     name: EBSPROD_Test
     runs-on: LTIM_TOSCA_97
     # needs: [test-EBSUAT]
-    # needs: [test-EBSUAT]
     environment: EBSPROD_Test
 
     env:
       ENVIRONMENT_NAME: EBSPROD_Test
     
     steps:
-      # - name: Run Tosca Test scripts
-      #   run: |
-      #     "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
-      #   shell: cmd
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+        shell: cmd
 
 
       - name: Publish JUnit Test Results to GitHub Actions
