@@ -1,5 +1,9 @@
 name: EBSDEMO - TOSCA Testing
 
+permissions:
+  checks: write
+  contents: read
+
 on:
   workflow_dispatch:
 
@@ -75,4 +79,4 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
           reporter: java-junit
-          path-replace-backslashes: true      
+          path-replace-backslashes: true
