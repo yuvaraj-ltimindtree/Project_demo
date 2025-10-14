@@ -1,5 +1,9 @@
 name: EBSDEMO - TOSCA Testing
 
+permissions:
+  checks: write
+  contents: read
+
 on:
   workflow_dispatch:
 
@@ -15,8 +19,12 @@ jobs:
     steps:
       - name: Run Tosca Test scripts
         run: |
-          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\RegressionConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_RegressionConfingfile.xml"
         shell: cmd
+
+      # for first run make sure to checkout the repo to have access to run dorny test results
+      # - name: Checkout repository
+        # uses: actions/checkout@v4
 
       - name: Publish JUnit Test Results to GitHub Actions
         uses: dorny/test-reporter@v1
@@ -24,12 +32,12 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
-
+          path-replace-backslashes: true
 
   test-EBSUAT:
     name: EBSUAT_Test
     runs-on: LTIM_TOSCA_97
-    needs: [test-EBSSIT]
+    # needs: [test-EBSSIT]
     environment: EBSUAT_Test
 
     env:
@@ -38,7 +46,7 @@ jobs:
     steps:
       - name: Run Tosca Test scripts
         run: |
-          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\PatchUpgradeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_PatchUpgradeConfingfile.xml"
         shell: cmd
 
       - name: Publish JUnit Test Results to GitHub Actions
@@ -47,11 +55,12 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
+          path-replace-backslashes: true      
 
   test-EBSPROD:
     name: EBSPROD_Test
     runs-on: LTIM_TOSCA_97
-    needs: [test-EBSUAT]
+    # needs: [test-EBSUAT]
     environment: EBSPROD_Test
 
     env:
@@ -69,3 +78,4 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
+          path-replace-backslashes: true      
