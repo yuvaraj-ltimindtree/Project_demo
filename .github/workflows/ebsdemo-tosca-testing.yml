@@ -3,36 +3,76 @@ name: EBSDEMO - TOSCA Testing
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  checks: write
-
 jobs:
+  test-EBSSIT:
+    name: EBSSIT_Test
+    runs-on: LTIM_TOSCA_97
+    environment: EBSSIT_Test
+
+    env:
+      ENVIRONMENT_NAME: EBSSIT_Test
+    
+    steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+        shell: cmd
+
+      - name: Publish JUnit Test Results to GitHub Actions
+        uses: dorny/test-reporter@v1
+        with:
+          name: Tosca JUnit Results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
+          reporter: java-junit
+
+
+  test-EBSUAT:
+    name: EBSUAT_Test
+    runs-on: LTIM_TOSCA_97
+    needs: [test-EBSSIT]
+    environment: EBSUAT_Test
+
+    env:
+      ENVIRONMENT_NAME: EBSUAT_Test
+    
+    steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+        shell: cmd
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Publish JUnit Test Results to GitHub Actions
+        uses: dorny/test-reporter@v1
+        with:
+          name: Tosca JUnit Results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
+          reporter: java-junit
+
   test-EBSPROD:
     name: EBSPROD_Test
     runs-on: LTIM_TOSCA_97
+    needs: [test-EBSUAT]
     environment: EBSPROD_Test
 
     env:
       ENVIRONMENT_NAME: EBSPROD_Test
-
+    
     steps:
+      - name: Run Tosca Test scripts
+        run: |
+          "C:\Program Files (x86)\TRICENTIS\Tosca Testsuite\ToscaCommander\ToscaCI\Client\ToscaCIClient.exe" -m local -c "C:\Temp\${{ env.ENVIRONMENT_NAME }}\smokeConfingfile.xml" -t junit -r "D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml"
+        shell: cmd
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Publish Tosca JUnit Test Results (Passed)
+      - name: Publish JUnit Test Results to GitHub Actions
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results (Passed)
-          path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
+          name: Tosca JUnit Results
+          path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
-          path-replace-backslashes: true
-
-      - name: Publish Tosca JUnit Test Results (Failed)
-        if: failure()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Tosca JUnit Results (Failed)
-          path: D:\EBSHOME_TESTING\results\27\EBSPROD_Test_smoke_result.xml
-          reporter: java-junit
-          path-replace-backslashes: true
+          path-replace-backslashes: true      
