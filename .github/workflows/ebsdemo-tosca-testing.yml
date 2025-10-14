@@ -28,7 +28,7 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
           reporter: java-junit
-
+          path-replace-backslashes: true
 
   test-EBSUAT:
     name: EBSUAT_Test
@@ -52,8 +52,9 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Tosca JUnit Results
-          path: D:\EBSHOME_TESTING\results\test\EBSPROD_Test_smoke_result.xml
+          path: D:\EBSHOME_TESTING\results\27\EBSPROD_Test_smoke_result.xml
           reporter: java-junit
+          path-replace-backslashes: true
 
   test-EBSPROD:
     name: EBSPROD_Test
