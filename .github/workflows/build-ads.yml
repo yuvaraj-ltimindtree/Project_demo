@@ -32,17 +32,12 @@ env:
   BUILD_NUMBER: ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
   REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
-
-  # Azure DevOps target repo (template) publishing (adjust)
-  AZDO_TEMPLATE_REPO: https://dev.azure.com/LTIMEBSDEVOPS/AUTODEPLOY/_git/EBS-Template
-  # Set these in GitHub repo Settings > Secrets and variables > Actions
-  #   AZDO_USER, AZDO_PAT (Personal Access Token), OPTIONAL_EMAIL
   GIT_AUTHOR_NAME: github-actions
   GIT_AUTHOR_EMAIL: actions@users.noreply.github.com
 
 jobs:
   ebs-build:
-    name: EBS Build
+    name: EBS-Build
     runs-on: LTIM-buildsrv
 
     steps:
@@ -81,10 +76,10 @@ jobs:
         run: |
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/build_details.py" "$BUILD_NUMBER"
 
-      - name: Branch Checking (must be develop)
+      - name: Branch Checking (must be main)
         run: |
           echo "Current branch: ${GITHUB_REF_NAME}"
-          if [ "${GITHUB_REF_NAME}" != "develop" ]; then
+          if [ "${GITHUB_REF_NAME}" != "main" ]; then
             echo "ERROR: Build must run from 'develop' branch"; exit 1;
           fi
 
@@ -104,3 +99,4 @@ jobs:
           echo "Jira: $Jira_No"
           echo "Repo_Directory: $Repo_Directory"
           echo "Files: $FileNames"
+  
