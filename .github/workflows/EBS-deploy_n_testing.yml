@@ -1,4 +1,4 @@
-name: EBS Development Rollout
+name: EBS Deployment & Testing 
 
 on:
   workflow_dispatch:
