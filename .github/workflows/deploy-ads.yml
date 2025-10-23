@@ -1,4 +1,4 @@
-name: EBS Deployment Pipeline
+name: EBS Deployment
 
 on:
   workflow_dispatch:
