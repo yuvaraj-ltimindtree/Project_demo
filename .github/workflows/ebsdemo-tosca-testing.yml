@@ -1,4 +1,4 @@
-name: EBSDEMO - TOSCA Testing
+name: EBSDEMO Testing
 
 permissions:
   checks: write
@@ -79,4 +79,5 @@ jobs:
           name: Tosca JUnit Results
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
+
           path-replace-backslashes: true      
