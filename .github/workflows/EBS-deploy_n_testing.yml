@@ -23,7 +23,6 @@ jobs:
   deploy-EBSSIT:
     name: EBSSIT
     runs-on: LTIM-buildsrv
-    needs: [ebs-build]
     environment: EBSSIT
     if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
     

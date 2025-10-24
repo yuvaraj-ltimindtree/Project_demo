@@ -23,7 +23,6 @@ jobs:
   deploy-EBSSIT:
     name: EBSSIT
     runs-on: LTIM-buildsrv
-    needs: [ebs-build]
     environment: EBSSIT
     if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
     
@@ -33,7 +32,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
@@ -64,7 +63,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
@@ -95,7 +94,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
