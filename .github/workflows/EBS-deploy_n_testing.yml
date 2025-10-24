@@ -17,7 +17,7 @@ env:
   REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
   GIT_AUTHOR_NAME: github-actions
   GIT_AUTHOR_EMAIL: actions@users.noreply.github.com
-
+Sania@13
 jobs:  
   # Stage 2: EBSSIT Environment
   deploy-EBSSIT:
@@ -32,7 +32,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
@@ -90,7 +90,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
@@ -144,7 +144,7 @@ jobs:
     steps:        
     - name: Deploy to ${{ env.ENVIRONMENT_NAME }}
       run: |
-        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "$BUILD_NUMBER"
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Transfer_Deploy.py" "$ENVIRONMENT_NAME" "${{ env.Build_no }}"
     
     - name: Display Deployment Log
       if: always()
