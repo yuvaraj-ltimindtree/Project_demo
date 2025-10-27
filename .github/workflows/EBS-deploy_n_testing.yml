@@ -1,5 +1,9 @@
 name: EBS Deployment & Testing 
 
+permissions:
+  checks: write
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
