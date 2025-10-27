@@ -1,0 +1,147 @@
+# $Header$
+
+# dbdrv: exec fnd bin FNDLOAD bin &phase=daa+70 checkfile:~PROD:~PATH:~FILE &ui_apps 0 Y UPLOAD @FND:patch/115/import/affrmcus.lct @~PROD:~PATH/~FILE
+LANGUAGE = "US"
+LDRCONFIG = "affrmcus.lct 120.7.12020000.4"
+
+#Source Database CDBBFIX
+
+#RELEASE_NAME 12.2.7
+
+# -- Begin Entity Definitions -- 
+
+DEFINE FND_FORM_CUSTOM_RULES
+  KEY   ID                              VARCHAR2(50)
+  BASE  FUNCTION_NAME                   VARCHAR2(30)
+  BASE  DESCRIPTION                     VARCHAR2(255)
+  BASE  TRIGGER_EVENT                   VARCHAR2(30)
+  BASE  TRIGGER_OBJECT                  VARCHAR2(100)
+  BASE  CONDITION                       VARCHAR2(2000)
+  BASE  SEQUENCE                        VARCHAR2(50)
+  BASE  CREATED_BY                      VARCHAR2(50)
+  BASE  CREATION_DATE                   VARCHAR2(11)
+  BASE  OWNER                           VARCHAR2(4000)
+  BASE  LAST_UPDATE_DATE                VARCHAR2(11)
+  BASE  LAST_UPDATE_LOGIN               VARCHAR2(50)
+  BASE  ENABLED                         VARCHAR2(1)
+  BASE  FIRE_IN_ENTER_QUERY             VARCHAR2(1)
+  BASE  RULE_KEY                        VARCHAR2(30)
+  BASE  FORM_NAME                       VARCHAR2(30)
+  BASE  RULE_TYPE                       VARCHAR2(1)
+
+  DEFINE FND_FORM_CUSTOM_SCOPES
+    KEY   RULE_ID                         VARCHAR2(50)
+    KEY   LEVEL_ID                        VARCHAR2(50)
+    KEY   LEVEL_VALUE                     VARCHAR2(4000)
+    BASE  LEVEL_VALUE_APPLICATION_ID      VARCHAR2(50)
+    BASE  LAST_UPDATE_DATE                VARCHAR2(11)
+    BASE  OWNER                           VARCHAR2(4000)
+    BASE  CREATION_DATE                   VARCHAR2(11)
+    BASE  CREATED_BY                      VARCHAR2(50)
+    BASE  LAST_UPDATE_LOGIN               VARCHAR2(50)
+  END FND_FORM_CUSTOM_SCOPES
+
+    DEFINE FND_FORM_CUSTOM_ACTIONS
+      KEY   ACTION_ID                       VARCHAR2(50)
+      BASE  SEQUENCE                        VARCHAR2(50)
+      BASE  PROPERTY_VALUE                  VARCHAR2(4000)
+      BASE  ARGUMENT_TYPE                   VARCHAR2(1)
+      BASE  CREATED_BY                      VARCHAR2(50)
+      BASE  CREATION_DATE                   VARCHAR2(11)
+      BASE  OWNER                           VARCHAR2(4000)
+      BASE  LAST_UPDATE_DATE                VARCHAR2(11)
+      BASE  LAST_UPDATE_LOGIN               VARCHAR2(50)
+      BASE  TARGET_OBJECT                   VARCHAR2(100)
+      BASE  ACTION_TYPE                     VARCHAR2(1)
+      BASE  ENABLED                         VARCHAR2(1)
+      BASE  OBJECT_TYPE                     VARCHAR2(30)
+      BASE  FOLDER_PROMPT_BLOCK             VARCHAR2(30)
+      BASE  MESSAGE_TYPE                    VARCHAR2(1)
+      BASE  MESSAGE_TEXT                    VARCHAR2(4000)
+      BASE  SUMMARY                         VARCHAR2(255)
+      BASE  BUILTIN_TYPE                    VARCHAR2(1)
+      BASE  BUILTIN_ARGUMENTS               VARCHAR2(4000)
+      BASE  LANGUAGE                        VARCHAR2(4)
+      KEY   RULE_ID                         VARCHAR2(50)
+      BASE  PROPERTY_NAME                   VARCHAR2(50)
+      BASE  MENU_ENTRY                      VARCHAR2(30)
+      BASE  MENU_LABEL                      VARCHAR2(80)
+      BASE  MENU_SEPERATOR                  VARCHAR2(1)
+      BASE  MENU_ENABLED_IN                 VARCHAR2(255)
+      BASE  MENU_ACTION                     VARCHAR2(1)
+      BASE  MENU_ARGUMENT_LONG              VARCHAR2(2000)
+      BASE  MENU_ARGUMENT_SHORT             VARCHAR2(255)
+      BASE  REQUEST_APPLICATION_ID          VARCHAR2(50)
+
+      DEFINE FND_FORM_CUSTOM_PARAMS
+        KEY   ACTION_ID                       VARCHAR2(50)
+        KEY   NAME                            VARCHAR2(240)
+        BASE  VALUE                           VARCHAR2(4000)
+        BASE  SEQUENCE                        VARCHAR2(50)
+        BASE  DEFAULT_TYPE                    VARCHAR2(1)
+        BASE  INHERIT                         VARCHAR2(1)
+        BASE  LAST_UPDATE_DATE                VARCHAR2(11)
+        BASE  OWNER                           VARCHAR2(4000)
+        BASE  CREATED_BY                      VARCHAR2(50)
+        BASE  CREATION_DATE                   VARCHAR2(11)
+        BASE  LAST_UPDATE_LOGIN               VARCHAR2(50)
+      END FND_FORM_CUSTOM_PARAMS
+    END FND_FORM_CUSTOM_ACTIONS
+END FND_FORM_CUSTOM_RULES
+
+# -- End Entity Definitions -- 
+
+
+BEGIN FND_FORM_CUSTOM_RULES "2947"
+  FUNCTION_NAME = "PO_POXRQERQ"
+  DESCRIPTION = "Restrict Requester to Raise PR without Buyer."
+  TRIGGER_EVENT = "WHEN-VALIDATE-RECORD"
+  TRIGGER_OBJECT = "LINES"
+  CONDITION =
+ "nvl(:LINES.SUGGESTED_BUYER_ID,0)=0 AND\n\
+:PO_REQ_HDR.TYPE_LOOKUP_CODE != 'INTERNAL'\n\
+AND :LINES.ITEM_NUMBER IS NOT NULL"
+  SEQUENCE = "15"
+  CREATED_BY = "1"
+  CREATION_DATE = "2023/07/19"
+  OWNER = "ORACLE12.2.7"
+  LAST_UPDATE_DATE = "2023/07/24"
+  LAST_UPDATE_LOGIN = "41549115"
+  ENABLED = "Y"
+  FIRE_IN_ENTER_QUERY = "N"
+  RULE_KEY = "PSL_P2P_PR_BUYER_CHK"
+  FORM_NAME = "POXRQERQ"
+  RULE_TYPE = "A"
+
+  BEGIN FND_FORM_CUSTOM_ACTIONS "3959" "2947"
+    SEQUENCE = "10"
+    ARGUMENT_TYPE = "C"
+    CREATED_BY = "1"
+    CREATION_DATE = "2023/07/19"
+    OWNER = "ORACLE12.2.7"
+    LAST_UPDATE_DATE = "2023/07/24"
+    LAST_UPDATE_LOGIN = "41549115"
+    ACTION_TYPE = "M"
+    ENABLED = "Y"
+    OBJECT_TYPE = "ITEM"
+    MESSAGE_TYPE = "E"
+    MESSAGE_TEXT =
+ "='Pls check buyer for Line Num'||:LINES.LINE_NUM ||',you cannot leave it blank.'"
+    BUILTIN_TYPE = "C"
+    LANGUAGE = "*"
+    PROPERTY_NAME = "1550"
+    MENU_SEPERATOR = "N"
+  
+  END FND_FORM_CUSTOM_ACTIONS
+  
+
+  BEGIN FND_FORM_CUSTOM_SCOPES "2947" "20" ""
+    LAST_UPDATE_DATE = "2023/07/19"
+    OWNER = "ORACLE12.2.7"
+    CREATION_DATE = "2023/07/19"
+    CREATED_BY = "1"
+    LAST_UPDATE_LOGIN = "41530698"
+  END FND_FORM_CUSTOM_SCOPES
+  
+END FND_FORM_CUSTOM_RULES
+

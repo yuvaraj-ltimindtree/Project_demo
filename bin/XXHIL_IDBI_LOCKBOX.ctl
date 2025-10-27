@@ -1,0 +1,37 @@
+LOAD DATA
+APPEND
+
+-- Type 1 - Lockbox Header
+
+INTO TABLE AR_PAYMENTS_INTERFACE
+WHEN RECORD_TYPE = '2'
+(
+  STATUS                                 CONSTANT 'AR_PLB_NEW_RECORD',
+  RECORD_TYPE                            POSITION(01:01) CHAR,
+  DESTINATION_ACCOUNT                    POSITION(02:17) CHAR,
+  ORIGINATION                            POSITION(18:28) CHAR,
+  LOCKBOX_NUMBER                         POSITION(29:35) CHAR
+)
+
+
+-- Type 2 - Receipt
+
+INTO TABLE AR_PAYMENTS_INTERFACE
+WHEN RECORD_TYPE = '6'
+(
+  STATUS                                 CONSTANT 'AR_PLB_NEW_RECORD',
+  RECORD_TYPE                            POSITION(01:01)   CHAR,
+  LOCKBOX_NUMBER                         POSITION(02:08)   CHAR "TRIM(TRIM(LEADING 0 FROM :LOCKBOX_NUMBER))",
+  BATCH_NAME                             POSITION(09:24)   CHAR,
+  ITEM_NUMBER                            POSITION(25:33)   CHAR,
+  REMITTANCE_AMOUNT                      POSITION(34:54)   CHAR,
+  TRANSIT_ROUTING_NUMBER                 POSITION(55:65)   CHAR,
+  ACCOUNT                                POSITION(66:81)   CHAR,
+  CHECK_NUMBER                           POSITION(82:103)  CHAR "TRIM(TRIM(LEADING 0 FROM :CHECK_NUMBER))",
+  DEPOSIT_DATE                           POSITION(104:111) DATE 'YYYYMMDD' NULLIF DEPOSIT_DATE=BLANKS,
+  BILL_TO_LOCATION                       POSITION(112:132)  CHAR "XXHIL_AR_GET_CUSTOMER_SITE(:BILL_TO_LOCATION)",
+  CUSTOMER_NUMBER                        POSITION(112:132)  CHAR "XXHIL_AR_GET_CUSTOMER_NUMBER(:CUSTOMER_NUMBER)",
+  ATTRIBUTE_CATEGORY 					 CONSTANT 'Receipt Additional Information',
+  ATTRIBUTE4							 CONSTANT 'Electronic',
+  ATTRIBUTE15							 POSITION(104:111) DATE 'YYYYMMDD' NULLIF DEPOSIT_DATE=BLANKS
+)
