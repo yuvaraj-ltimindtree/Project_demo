@@ -73,9 +73,10 @@ jobs:
         # uses: actions/checkout@v4
 
       - name: Publish JUnit Test Results to GitHub Actions
+        if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results
+          name: Tosca JUnit Results ${{ env.ENVIRONMENT_NAME }}
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_RegressionConfingfile.xml
           reporter: java-junit
           path-replace-backslashes: true
@@ -127,9 +128,10 @@ jobs:
         shell: cmd
 
       - name: Publish JUnit Test Results to GitHub Actions
+        if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results
+          name: Tosca JUnit Results ${{ env.ENVIRONMENT_NAME }}
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_PatchUpgradeConfingfile.xml
           reporter: java-junit
           path-replace-backslashes: true      
@@ -182,9 +184,10 @@ jobs:
 
 
       - name: Publish JUnit Test Results to GitHub Actions
+        if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: Tosca JUnit Results
+          name: Tosca JUnit Results ${{ env.ENVIRONMENT_NAME }}
           path: D:\EBSHOME_TESTING\results\${{ github.run_number }}\${{ env.ENVIRONMENT_NAME }}_smoke_result.xml
           reporter: java-junit
           path-replace-backslashes: true 
