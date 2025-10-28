@@ -23,8 +23,8 @@ on:
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
-  BASE_PATH: "/u01/buildsrv/EBSHOME"
-  LIVE: Github_Demo                # <- set to your runtime folder name
+  BASE_PATH: "/u01/buildsrv/EBSHOME_github"
+  LIVE: Demo                # <- set to your runtime folder name
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
