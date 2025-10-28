@@ -29,6 +29,7 @@ env:
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
+  Repo_Directory: None
   Migration_File: ${{ inputs.Migration_File }}
   BUILD_NUMBER: ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
