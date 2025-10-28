@@ -1,4 +1,4 @@
-name: EBSDEMO Testing
+name: EBS Testing
 
 permissions:
   checks: write
@@ -84,3 +84,4 @@ jobs:
           reporter: java-junit
 
           path-replace-backslashes: true      
+
