@@ -19,6 +19,7 @@ on:
         - $XXDEMOC_TOP
       Migration_File:
         description: Migration excel filename 
+        default: optional
         required: false 
 
 env:
@@ -94,6 +95,6 @@ jobs:
         run: |
           echo "Build Number: $BUILD_NUMBER"
           echo "Jira: $Jira_No"
-          echo "Repo_Directory: $Repo_Directory"
+          echo "Migration_File: $Migration_File"
           echo "Files: $FileNames"
   
