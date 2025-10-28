@@ -71,7 +71,7 @@ jobs:
       - name: Branch Checking (must be main)
         run: |
           echo "Current branch: ${GITHUB_REF_NAME}"
-          if [ "${GITHUB_REF_NAME}" != "main" ]; then
+          if [ "${GITHUB_REF_NAME}" != "develop" ]; then
             echo "ERROR: Build must run from 'develop' branch"; exit 1;
           fi
 
