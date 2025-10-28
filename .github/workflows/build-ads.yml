@@ -85,7 +85,7 @@ jobs:
 
       - name: Trigger Python Script for Package Building
         run: |
-          python3 "$BASE_PATH/Automation_Scripts/$LIVE/main.py" BUILD "$BUILD_NUMBER"
+          python3 "$BASE_PATH/Automation_Scripts/$LIVE/main.py" BUILD "$BUILD_NUMBER" "$REQUESTED_FOR" "$REQUESTED_FOR_EMAIL"
 
       - name: Upload Repo Snapshot Artifact
         uses: actions/upload-artifact@v4
