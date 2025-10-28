@@ -68,10 +68,6 @@ jobs:
               w.writerow(row)
           PY
 
-      - name: Build Details
-        run: |
-          python3 "$BASE_PATH/Automation_Scripts/$LIVE/build_details.py" "$BUILD_NUMBER"
-
       - name: Branch Checking (must be main)
         run: |
           echo "Current branch: ${GITHUB_REF_NAME}"
@@ -82,6 +78,10 @@ jobs:
       - name: Trigger Python Script for Package Building
         run: |
           python3 "$BASE_PATH/Automation_Scripts/$LIVE/main.py" BUILD "$BUILD_NUMBER" "$REQUESTED_FOR" "$REQUESTED_FOR_EMAIL"
+
+      - name: Build Details
+        run: |
+          python3 "$BASE_PATH/Automation_Scripts/$LIVE/build_details.py" "$BUILD_NUMBER"
 
       - name: Upload Repo Snapshot Artifact
         uses: actions/upload-artifact@v4
