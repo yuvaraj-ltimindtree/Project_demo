@@ -41,10 +41,10 @@ jobs:
     runs-on: LTIM-buildsrv
 
     steps:
-      - name: Checkout (develop)
+      - name: Checkout (main)
         uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: main
           fetch-depth: 0   # get tags
           fetch-tags: true
       - name: Converting User Input to CSV file
