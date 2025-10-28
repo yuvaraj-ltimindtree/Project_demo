@@ -54,7 +54,7 @@ jobs:
           import csv, os
           base = os.environ["BASE_PATH"]
           path = os.path.join(base, "csv_files", "build_user_input.csv")
-          header = ["Build_no","Repo_Directory","Jira_No","FileNames","Custom_Top"]
+          header = ["Build_no","Repo_Directory","Migration_File","Jira_No","FileNames","Custom_Top"]
           row = {
             "Build_no": os.environ.get("BUILD_NUMBER",""),
             "Repo_Directory": None,
