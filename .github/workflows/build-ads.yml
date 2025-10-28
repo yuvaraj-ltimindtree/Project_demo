@@ -18,7 +18,7 @@ on:
         - $XXDEMO_TOP
         - $XXDEMOC_TOP
       Migration_file:
-        description: list of filenames for deployment 
+        description: Migration excel filename 
         required: false 
 
 env:
