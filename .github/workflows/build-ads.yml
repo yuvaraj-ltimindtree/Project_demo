@@ -17,7 +17,7 @@ on:
         options:
         - $XXDEMO_TOP
         - $XXDEMOC_TOP
-      Migration_file:
+      Migration_File:
         description: Migration excel filename 
         required: false 
 
@@ -57,7 +57,8 @@ jobs:
           header = ["Build_no","Repo_Directory","Jira_No","FileNames","Custom_Top"]
           row = {
             "Build_no": os.environ.get("BUILD_NUMBER",""),
-            "Repo_Directory": os.environ.get("Repo_Directory",""),
+            "Repo_Directory": None,
+            "Migration_File": os.environ.get("Migration_File",""),
             "Jira_No": os.environ.get("Jira_No",""),
             "FileNames": os.environ.get("FileNames",""),
             "Custom_Top": os.environ.get("CUSTOM_TOP","")
