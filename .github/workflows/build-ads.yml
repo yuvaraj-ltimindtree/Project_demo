@@ -10,7 +10,7 @@ on:
         description: Comma separated file names
         required: false
       CUSTOM_TOP:
-        description: Custom top value
+        description: Custom top directory
         required: true
         default: $XXDEMO_TOP
         type: choice
@@ -59,7 +59,7 @@ jobs:
           header = ["Build_no","Repo_Directory","Migration_File","Jira_No","FileNames","Custom_Top"]
           row = {
             "Build_no": os.environ.get("BUILD_NUMBER",""),
-            "Repo_Directory": None,
+            "Repo_Directory": os.environ.get("Repo_Directory",""),
             "Migration_File": os.environ.get("Migration_File",""),
             "Jira_No": os.environ.get("Jira_No",""),
             "FileNames": os.environ.get("FileNames",""),
