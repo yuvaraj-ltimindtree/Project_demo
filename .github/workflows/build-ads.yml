@@ -28,7 +28,7 @@ env:
   CUSTOM_TOP: ${{ inputs.CUSTOM_TOP }}
   FileNames: ${{ inputs.FileNames }}
   Jira_No: ${{ inputs.Jira_No }}
-  Repo_Directory: ${{ inputs.Repo_Directory }}
+  Migration_File: ${{ inputs.Migration_File }}
   BUILD_NUMBER: ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
   REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
