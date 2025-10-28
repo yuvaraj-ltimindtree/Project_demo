@@ -17,9 +17,9 @@ on:
         options:
         - $XXDEMO_TOP
         - $XXDEMOC_TOP
-      Repo_Directory:
-        description: directory path in repository 
-        required: true
+      Migration_file:
+        description: list of filenames for deployment 
+        required: false 
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
