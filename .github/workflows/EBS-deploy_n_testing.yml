@@ -53,6 +53,20 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
+    - name: Extract and update 
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
+          BUILD \
+          "${{ env.Build_no }}" \
+          "${{ github.workflow }}" \
+          "${{ github.run_number }}" \
+          "${{ github.actor }}" \
+          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "${{ env.ENVIRONMENT_NAME }}" \
+          "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
+          "${{ github.triggering_actor }}" \
+          "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
+
   test-EBSSIT:
     name: EBSSIT_Test
     runs-on: LTIM_TOSCA_97
@@ -112,6 +126,21 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
+    - name: Extract and update 
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
+          BUILD \
+          "${{ env.Build_no }}" \
+          "${{ github.workflow }}" \
+          "${{ github.run_number }}" \
+          "${{ github.actor }}" \
+          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "${{ env.ENVIRONMENT_NAME }}" \
+          "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
+          "${{ github.triggering_actor }}" \
+          "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
+
+
   test-EBSUAT:
     name: EBSUAT_Test
     runs-on: LTIM_TOSCA_97
@@ -166,6 +195,20 @@ jobs:
       if: always()
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
+
+    - name: Extract and update 
+      run: |
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
+          BUILD \
+          "${{ env.Build_no }}" \
+          "${{ github.workflow }}" \
+          "${{ github.run_number }}" \
+          "${{ github.actor }}" \
+          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "${{ env.ENVIRONMENT_NAME }}" \
+          "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
+          "${{ github.triggering_actor }}" \
+          "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
 
   test-EBSPROD:
     name: EBSPROD_Test
