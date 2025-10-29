@@ -18,5 +18,6 @@ values
  NULL;
 END;
 /
-exit
+SHOW ERROR;
+EXIT;
 
