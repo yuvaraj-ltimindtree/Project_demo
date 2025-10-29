@@ -9,8 +9,8 @@ on:
 
 env:
   # Static / migrated ADO variable equivalents (override in repo or add to workflow_dispatch inputs)
-  BASE_PATH: "/u01/buildsrv/EBSHOME"
-  LIVE: Github_Demo                # <- set to your runtime folder name
+  BASE_PATH: "/u01/buildsrv/EBSHOME_github"
+  LIVE: Demo                # <- set to your runtime folder name
   Build_no: ${{ inputs.Build_no }}
   Deployment_no : ${{ github.run_number }}
   REQUESTED_FOR: ${{ github.actor }}
