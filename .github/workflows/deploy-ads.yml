@@ -51,7 +51,7 @@ jobs:
 
     - name: Extract and update 
       run: |
-        python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
           BUILD \
           "${{ env.Build_no }}" \
           "${{ github.workflow }}" \
@@ -96,7 +96,7 @@ jobs:
 
     - name: Extract and update 
       run: |
-        python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
           BUILD \
           "${{ env.Build_no }}" \
           "${{ github.workflow }}" \
@@ -141,7 +141,7 @@ jobs:
 
     - name: Extract and update 
       run: |
-        python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
+        python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/extract.py" \
           BUILD \
           "${{ env.Build_no }}" \
           "${{ github.workflow }}" \
