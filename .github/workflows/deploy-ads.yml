@@ -24,7 +24,7 @@ jobs:
     name: EBSSIT
     runs-on: LTIM-buildsrv
     environment: EBSSIT
-    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/main'
+    if: github.event.inputs.environment == 'EBSSIT' || github.ref == 'refs/heads/develop'
     
     env:
       ENVIRONMENT_NAME: EBSSIT
@@ -55,7 +55,7 @@ jobs:
     runs-on: LTIM-buildsrv
     needs: [deploy-EBSSIT]
     environment: EBSUAT
-    if: github.event.inputs.environment == 'EBSUAT' || github.ref == 'refs/heads/main'
+    if: github.event.inputs.environment == 'EBSUAT' || github.ref == 'refs/heads/develop'
     
     env:
       ENVIRONMENT_NAME: EBSUAT
@@ -86,7 +86,7 @@ jobs:
     runs-on: LTIM-buildsrv
     needs: [deploy-EBSUAT]
     environment: EBSPROD
-    if: github.event.inputs.environment == 'EBSPROD' || github.ref == 'refs/heads/main'
+    if: github.event.inputs.environment == 'EBSPROD' || github.ref == 'refs/heads/develop'
     
     env:
       ENVIRONMENT_NAME: EBSPROD
