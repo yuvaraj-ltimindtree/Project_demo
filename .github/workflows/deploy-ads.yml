@@ -58,7 +58,7 @@ jobs:
           "${{ github.run_number }}" \
           "${{ github.actor }}" \
           "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-          "$ENVIRONMENT_NAME" \
+          "${{ env.ENVIRONMENT_NAME }}" \
           "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
           "${{ github.triggering_actor }}" \
           "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
@@ -94,6 +94,20 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
+    - name: Extract and update 
+      run: |
+        python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
+          BUILD \
+          "${{ env.Build_no }}" \
+          "${{ github.workflow }}" \
+          "${{ github.run_number }}" \
+          "${{ github.actor }}" \
+          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "${{ env.ENVIRONMENT_NAME }}" \
+          "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
+          "${{ github.triggering_actor }}" \
+          "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
+
 
   deploy-EBSPROD:
     name: EBSPROD
@@ -125,3 +139,16 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
+    - name: Extract and update 
+      run: |
+        python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
+          BUILD \
+          "${{ env.Build_no }}" \
+          "${{ github.workflow }}" \
+          "${{ github.run_number }}" \
+          "${{ github.actor }}" \
+          "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "${{ env.ENVIRONMENT_NAME }}" \
+          "${{ vars.USER_EMAIL || 'noreply@github.com' }}" \
+          "${{ github.triggering_actor }}" \
+          "${{ vars.DEPLOYMENT_EMAIL || 'noreply@github.com' }}"
