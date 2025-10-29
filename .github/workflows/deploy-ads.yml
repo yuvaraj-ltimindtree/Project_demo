@@ -53,7 +53,7 @@ jobs:
   deploy-EBSUAT:
     name: EBSUAT
     runs-on: LTIM-buildsrv
-    # needs: [deploy-EBSSIT]
+    needs: [deploy-EBSSIT]
     environment: EBSUAT
     if: github.event.inputs.environment == 'EBSUAT' || github.ref == 'refs/heads/develop'
     
@@ -84,7 +84,7 @@ jobs:
   deploy-EBSPROD:
     name: EBSPROD
     runs-on: LTIM-buildsrv
-    # needs: [deploy-EBSUAT]
+    needs: [deploy-EBSUAT]
     environment: EBSPROD
     if: github.event.inputs.environment == 'EBSPROD' || github.ref == 'refs/heads/develop'
     
