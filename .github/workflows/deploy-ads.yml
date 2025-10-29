@@ -49,7 +49,7 @@ jobs:
       run: |
         python3 "${{ env.BASE_PATH }}/Automation_Scripts/${{ env.LIVE }}/Catch_deployment_error.py"
 
-    - name: Catch Deployment Errors
+    - name: Extract and update 
       run: |
         python3 "${{ github.workspace }}/Automation_Scripts/extract.py" \
           BUILD \
