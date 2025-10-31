@@ -16,5 +16,6 @@ BEGIN
         COMMIT;
 END;
 /
-exit
+SHOW ERROR;
+EXIT;
 
