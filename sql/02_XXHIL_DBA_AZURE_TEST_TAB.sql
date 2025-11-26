@@ -1,3 +1,6 @@
+-- update comment 
+-- Author : Yuvaraj 
+
 CREATE TABLE APPS.XXHIL_DBA_AZURE_TEST_TAB
 (
   SRNO  NUMBER(4),
