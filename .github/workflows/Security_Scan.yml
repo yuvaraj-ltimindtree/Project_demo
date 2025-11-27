@@ -88,6 +88,8 @@ jobs:
           java-version: '11'
       - name: pmd
         uses: pmd/pmd-github-action@v2
+        with:
+          rulesets: 'ruleset.xml'
           
       - name: Upload SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
