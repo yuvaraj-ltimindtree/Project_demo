@@ -81,16 +81,17 @@ jobs:
           fetch-depth: 0   # get tags
           fetch-tags: true
           
+
       - name: Install SonarScanner CLI
         run: |
           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
           unzip sonar-scanner.zip -d $HOME
-          export PATH="$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH"
+          echo "$HOME/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
 
       - name: Run SonarQube Scan
         run: |
           sonar-scanner \
             -Dsonar.projectKey=my-oracle-ebs-project \
             -Dsonar.sources=. \
-            -Dsonar.host.url=http://localhost:9000 \
-            -Dsonar.login=  
+            -Dsonar.host.url=http://your-sonarqube-server:9000 \
+            -Dsonar.login= 
