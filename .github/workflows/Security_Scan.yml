@@ -69,9 +69,9 @@ jobs:
           sarif_file: semgrep-results.sarif
 
 
-  SonarQube:
+  PMD:
     runs-on: ubuntu-latest
-    name: SAST-SonarQube
+    name: SAST-PMD
       
     steps:
       - name: Checkout (develop)
@@ -81,16 +81,16 @@ jobs:
           fetch-depth: 0   # get tags
           fetch-tags: true
           
+      - name: Run PMD
+        id: pmd
+        uses: pmd/pmd-github-action@967a81f8b657c87f7c3e96b62301cb1a48efef29
+        with:
+          rulesets: 'rulesets/java/quickstart.xml'
+          sourcePath: '.'
+          analyzeModifiedFilesOnly: false
+          
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pmd-results.sarif
 
-      - name: Install SonarScanner CLI
-        run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner.zip -d $HOME
-          echo "$HOME/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
-
-      - name: Run SonarQube Scan
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=my-oracle-ebs-project \
-            -Dsonar.sources=. \
-            
