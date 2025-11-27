@@ -5,7 +5,7 @@ rules:
     patterns:
       - pattern: EXECUTE IMMEDIATE $X
     message: "Avoid EXECUTE IMMEDIATE with unvalidated input (SQL Injection risk)."
-    languages: [sql]
+    languages: [plsql]
     severity: ERROR
 
   # 2. Use of DBMS_SQL (Risky dynamic SQL)
@@ -13,7 +13,7 @@ rules:
     patterns:
       - pattern: DBMS_SQL.$FUNC($ARGS)
     message: "Avoid DBMS_SQL for dynamic SQL unless input is validated."
-    languages: [sql]
+    languages: [plsql]
     severity: WARNING
 
   # 3. Hardcoded Passwords in PL/SQL
@@ -21,7 +21,7 @@ rules:
     patterns:
       - pattern-regex: "(password\\s*:=\\s*['\"][^'\"]+['\"])"
     message: "Hardcoded password detected in PL/SQL."
-    languages: [sql]
+    languages: [plsql]
     severity: WARNING
 
   # 4. Granting Excessive Privileges
@@ -29,7 +29,7 @@ rules:
     patterns:
       - pattern-regex: "(GRANT\\s+ALL\\s+ON)"
     message: "Avoid granting ALL privileges in Oracle EBS custom code."
-    languages: [sql]
+    languages: [plsql]
     severity: ERROR
 
   # 5. Java SQL Injection via Statement
@@ -55,7 +55,7 @@ rules:
     patterns:
       - pattern: UTL_FILE.$FUNC($ARGS)
     message: "Validate file paths when using UTL_FILE to prevent directory traversal."
-    languages: [sql]
+    languages: [plsql]
     severity: WARNING
 
   # 8. Insecure Use of UTL_HTTP
@@ -63,5 +63,5 @@ rules:
     patterns:
       - pattern: UTL_HTTP.$FUNC($ARGS)
     message: "Validate URLs when using UTL_HTTP to prevent SSRF attacks."
-    languages: [sql]
+    languages: [plsql]
     severity: WARNING
