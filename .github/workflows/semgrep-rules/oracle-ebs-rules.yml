@@ -1,0 +1,67 @@
+
+rules:
+  # 1. Dynamic SQL in PL/SQL
+  - id: plsql-dynamic-sql
+    patterns:
+      - pattern: EXECUTE IMMEDIATE $X
+    message: "Avoid EXECUTE IMMEDIATE with unvalidated input (SQL Injection risk)."
+    languages: [sql]
+    severity: ERROR
+
+  # 2. Use of DBMS_SQL (Risky dynamic SQL)
+  - id: plsql-dbms-sql
+    patterns:
+      - pattern: DBMS_SQL.$FUNC($ARGS)
+    message: "Avoid DBMS_SQL for dynamic SQL unless input is validated."
+    languages: [sql]
+    severity: WARNING
+
+  # 3. Hardcoded Passwords in PL/SQL
+  - id: plsql-hardcoded-password
+    patterns:
+      - pattern-regex: "(password\\s*:=\\s*['\"][^'\"]+['\"])"
+    message: "Hardcoded password detected in PL/SQL."
+    languages: [sql]
+    severity: WARNING
+
+  # 4. Granting Excessive Privileges
+  - id: plsql-grant-all
+    patterns:
+      - pattern-regex: "(GRANT\\s+ALL\\s+ON)"
+    message: "Avoid granting ALL privileges in Oracle EBS custom code."
+    languages: [sql]
+    severity: ERROR
+
+  # 5. Java SQL Injection via Statement
+  - id: java-sql-injection
+    patterns:
+      - pattern: |
+          Statement stmt = $X.createStatement();
+          stmt.executeQuery($Y);
+    message: "Possible SQL Injection: Avoid concatenating user input in SQL queries."
+    languages: [java]
+    severity: ERROR
+
+  # 6. Hardcoded Credentials in Java
+  - id: java-hardcoded-credentials
+    patterns:
+      - pattern-regex: "(String\\s+(username|password)\\s*=\\s*\"[^\"]+\")"
+    message: "Hardcoded credentials detected in Java code."
+    languages: [java]
+    severity: WARNING
+
+  # 7. Insecure Use of UTL_FILE
+  - id: plsql-utl-file
+    patterns:
+      - pattern: UTL_FILE.$FUNC($ARGS)
+    message: "Validate file paths when using UTL_FILE to prevent directory traversal."
+    languages: [sql]
+    severity: WARNING
+
+  # 8. Insecure Use of UTL_HTTP
+  - id: plsql-utl-http
+    patterns:
+      - pattern: UTL_HTTP.$FUNC($ARGS)
+    message: "Validate URLs when using UTL_HTTP to prevent SSRF attacks."
+    languages: [sql]
+    severity: WARNING
