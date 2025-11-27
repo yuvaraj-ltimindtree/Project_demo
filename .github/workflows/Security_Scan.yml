@@ -32,10 +32,6 @@ env:
   Repo_Directory: None
   Migration_File: ${{ inputs.Migration_File }}
   BUILD_NUMBER: ${{ github.run_number }}
-  REQUESTED_FOR: ${{ github.actor }}
-  REQUESTED_FOR_EMAIL: "abcd@abcd.com"    # Not directly available in GitHub; supply via secret or input if needed
-  GIT_AUTHOR_NAME: github-actions
-  GIT_AUTHOR_EMAIL: actions@users.noreply.github.com
 
 jobs:
 
@@ -56,13 +52,7 @@ jobs:
           pip install semgrep
 
       - name: Run Semgrep Scan
-        run: |
-          semgrep --config "p/owasp-top-ten" \
-                  --config "p/java" \
-                  --config "p/sql" \
-                  --include '*.java' \
-                  --include '*.sql' \
-                  --sarif --output semgrep-results.sarif
+        run: semgrep scan --config auto --output semgrep-results.sarif --sarif
 
       - name: Upload SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
