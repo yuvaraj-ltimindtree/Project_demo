@@ -61,7 +61,7 @@ jobs:
           pip install semgrep
 
       - name: Run Semgrep Scan
-        run: semgrep scan --config oracle-ebs-rules.yml --include '*.sql' --include '*.java' --output semgrep-results.sarif --sarif
+        run: semgrep scan --config .github/workflows/semgrep-rules/oracle-ebs-rules.yml --include '*.sql' --include '*.java' --output semgrep-results.sarif --sarif
 
       - name: Upload SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
