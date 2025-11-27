@@ -59,7 +59,8 @@ jobs:
       - name: Semgrep installation
         uses: returntocorp/semgrep-action@v1
         with:
-          config: .github/workflows/semgrep-rules  # Path to your rules folder
+          config: .github/workflows/semgrep-rules 
+          --include: '*.sql' 
           generateSarif: true
           uploadSarif: true
           
