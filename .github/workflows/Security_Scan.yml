@@ -80,17 +80,16 @@ jobs:
           ref: develop
           fetch-depth: 0   # get tags
           fetch-tags: true
-          
-      - name: Run PMD
-        id: pmd
-        uses: pmd/pmd-github-action@967a81f8b657c87f7c3e96b62301cb1a48efef29
+
+      - name: java setup
+        uses: actions/setup-java@v4
         with:
-          rulesets: 'rulesets/java/quickstart.xml'
-          sourcePath: '.'
-          analyzeModifiedFilesOnly: false
+          distribution: 'temurin'
+          java-version: '11'
+      - name: pmd
+        uses: pmd/pmd-github-action@v2
           
       - name: Upload SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: pmd-results.sarif
-
+          sarif_file: pmd-report.sarif
