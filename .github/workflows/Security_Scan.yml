@@ -67,3 +67,20 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep-results.sarif
+
+
+  SonarQube:
+    runs-on: ubuntu-latest
+    name: SAST-SonarQube
+      
+    steps:
+      - name: Checkout (develop)
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0   # get tags
+          fetch-tags: true
+          
+      - name: Sonarqube scan
+        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+
