@@ -93,5 +93,4 @@ jobs:
           sonar-scanner \
             -Dsonar.projectKey=my-oracle-ebs-project \
             -Dsonar.sources=. \
-            -Dsonar.host.url=http://your-sonarqube-server:9000 \
-            -Dsonar.login= 
+            
