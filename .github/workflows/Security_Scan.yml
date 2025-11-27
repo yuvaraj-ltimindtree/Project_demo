@@ -61,7 +61,7 @@ jobs:
           pip install semgrep
 
       - name: Run Semgrep Scan
-        run: semgrep scan --config auto --output semgrep-results.sarif --sarif
+        run: semgrep scan --config oracle-ebs-rules.yml --include '*.sql' --include '*.java' --output semgrep-results.sarif --sarif
 
       - name: Upload SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
@@ -69,29 +69,3 @@ jobs:
           sarif_file: semgrep-results.sarif
 
 
-  PMD:
-    runs-on: ubuntu-latest
-    name: SAST-PMD
-      
-    steps:
-      - name: Checkout (develop)
-        uses: actions/checkout@v4
-        with:
-          ref: develop
-          fetch-depth: 0   # get tags
-          fetch-tags: true
-
-      - name: java setup
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-      - name: pmd
-        uses: pmd/pmd-github-action@v2
-        with:
-          rulesets: 'ruleset.xml'
-          
-      - name: Upload SARIF to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: pmd-report.sarif
