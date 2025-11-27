@@ -62,7 +62,7 @@ jobs:
 
       - name: Run Semgrep Scan
         run: |
-          semgrep scan --validate --config .github/workflows/semgrep-rules/oracle-ebs-rules.yml \
+          semgrep scan --config .github/workflows/semgrep-rules/oracle-ebs-rules.yml \
                   --include '*.sql' \
                   --include '*.java' \
                   --sarif --output semgrep-results.sarif
