@@ -65,13 +65,13 @@ jobs:
           semgrep scan --config .github/workflows/semgrep-rules/oracle-ebs-rules.yml \
                   --include '*.sql' \
                   --include '*.java' \
-                  --json --output semgrep-results.json
+                  --sarif --output semgrep-results.sariff
 
-      - name: Upload semgrep results
-        uses:  actions/upload-artifact@v5.0.0
-        with:   
-          name: semgrep-results
-          path: semgrep-results.json
+
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep-results.sarif
 
           
 
